@@ -109,12 +109,18 @@
                         alert('Error occurred: ' + statusText + ' - ' + errorText);
                     }
                 });
+
+                return false;
             });
         });
 
         function validateForm(form) {
-            $(form).addClass('was-validated');
-            return form.checkValidity();
+            if (!form.checkValidity()) {
+                $(form).addClass('was-validated');
+                return false;
+            }
+
+            return true;
         }
         </script>
     </body>
