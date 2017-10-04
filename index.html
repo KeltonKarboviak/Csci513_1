@@ -27,6 +27,10 @@
             </div>
         </div>
 
+        <div class="alert alert-success" role="alert" style="display: none;">
+            <strong>Success!</strong> Here's a message.
+        </div>
+
     	<div class="container">
             <div class="card-deck">
                 <div class="card border-info">
@@ -39,7 +43,7 @@
                                 <input type="password" class="form-control" id="admin_password" name="admin_password">
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Login</button>
                             </div>
                         </form>
                     </div>
@@ -76,7 +80,7 @@
                                 <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Your name goes here">
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Login</button>
                             </div>
                         </form>
                     </div>
@@ -98,21 +102,43 @@
                     return false;
 
                 var name = $('#dev_name').val();
+                $alertBar = $('.alert');
+
                 $.ajax({
                     type: 'POST',
-                    url: 'cgi-bin/AddDeveloper.cgi',
-                    data: {name: name},
+                    url: '../../cgi-bin/513/1/AddDeveloper.cgi',
+                    data: {dev_name: name},
                     success: function (data, statusText) {
-                        alert('AJAX Success: ' + data);
+                        if (data.status === 'success')
+                            alertBar($alertBar, true, '<strong>Success!</strong> "' + name + '" has been added as a Developer.');
+                        else
+                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Developer.');
+
+                        // Clear out text box
+                        $('#dev_name').val('');
                     },
                     error: function (xhr, statusText, errorText) {
-                        alert('Error occurred: ' + statusText + ' - ' + errorText);
+                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Developer.');
                     }
                 });
 
                 return false;
             });
         });
+
+        function alertBar($alertBar, isSuccess, msg) {
+            if (isSuccess)
+                $alertBar.removeClass('alert-warning').addClass('alert-success');
+            else
+                $alertBar.removeClass('alert-success').addClass('alert-warning');
+
+            $alertBar.html(msg);
+
+            $alertBar.fadeIn();
+            setTimeout(function () {
+                $alertBar.fadeOut();
+            }, 5000);
+        }
 
         function validateForm(form) {
             if (!form.checkValidity()) {
