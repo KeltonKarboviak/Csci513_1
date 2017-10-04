@@ -20,15 +20,69 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-	<div class="container">
-            <div class="jumbotron">
-                <h1>Welcome to the Game Store</h1>
-            </div>
-
-            <div class="card-deck">
-
+        <div class="jumbotron bg-primary text-light">
+            <div class="container">
+                <h1 class="display-3">Welcome to the Game Store!</h1>
+                <p class="lead">We sell a mediocre number of games here.</p>
             </div>
         </div>
+
+    	<div class="container">
+            <div class="card-deck">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Admin?</h4>
+                        <p class="card-text">Enter the administrator's password below in order to gain admin privileges.</p>
+                        <form id="form-admin-signin">
+                            <div class="form-group">
+                                <label for="admin_password">Password</label>
+                                <input type="password" class="form-control" id="admin_password" name="admin_password">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Developer?</h4>
+                        <p class="card-text">Enter your name below to so it can be added to games in the store.</p>
+                        <div class="form_dev_add">
+                            <form id="form_dev_add" class="needs-validation" novalidate>
+                                <div class="form-group">
+                                    <label for="dev_name">Name</label>
+                                    <input type="text" class="form-control" id="dev_name" name="dev_name" placeholder="Your name goes here" required>
+                                    <div class="invalid-feedback">
+                                        Please provide a non-empty name.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Customer?</h4>
+                        <p class="card-text">Enter your name below to enter the site as a customer and purchase some games.</p>
+                        <form id="form-customer-signin">
+                            <div class="form-group">
+                                <label for="cust_name">Name</label>
+                                <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Your name goes here">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- /.card-deck -->
+        </div> <!-- /.container -->
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -36,5 +90,32 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
+
+        <script>
+        $(function () {
+            ($('form#form_dev_add').on('submit', function () {
+                if (!validateForm(this))
+                    return false;
+
+                var name = $('#dev_name').val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'cgi-bin/AddDeveloper.cgi',
+                    data: {name: name},
+                    success: function (data, statusText) {
+                        alert('AJAX Success: ' + data);
+                    },
+                    error: function (xhr, statusText, errorText) {
+                        alert('Error occurred: ' + statusText + ' - ' + errorText);
+                    }
+                });
+            });
+        });
+
+        function validateForm(form) {
+            $(form).addClass('was-validated');
+            return form.checkValidity();
+        }
+        </script>
     </body>
 </html>
