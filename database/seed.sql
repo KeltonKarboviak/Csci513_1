@@ -12,23 +12,23 @@ insert into developers (name) VALUES ('joe');
 
 
 -- Fill customers table
-insert into customers (name, account) VALUES ('mary',
+insert into customers (username, account) VALUES ('mary',
     purchased_games_table(
         purchased_game_t(asin_t('1234567890'), 2, 30.00),
         purchased_game_t(asin_t('0987654321'), 1, 18.25)
     )
 );
-insert into customers (name, account) VALUES ('carly',
+insert into customers (username, account) VALUES ('carly',
     purchased_games_table(
         purchased_game_t(asin_t('1234567890'), 1, 15.00)
     )
 );
-insert into customers (name, account) VALUES ('susie',
+insert into customers (username, account) VALUES ('susie',
     purchased_games_table(
         purchased_game_t(asin_t('1234567890'), 2, 30.00),
         purchased_game_t(asin_t('0987654321'), 1, 18.25),
         purchased_game_t(asin_t('B00QWERTYU'), 3, 37.98)
     )
 );
-insert into customers (name) VALUES ('sally');
+insert into customers (username) VALUES ('sally');
 
