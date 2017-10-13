@@ -32,3 +32,4 @@ insert into customers (username, account) VALUES ('susie',
 );
 insert into customers (username) VALUES ('sally');
 
+commit;
