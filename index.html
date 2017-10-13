@@ -14,6 +14,12 @@
         <link href="./open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <link rel="stylesheet" href="css/main.css">
+
+        <style>
+        body {
+            background-color: hsl(199, 8%, 92%);
+        }
+        </style>
     </head>
     <body>
         <!--[if lte IE 9]>
@@ -33,14 +39,17 @@
 
     	<div class="container">
             <div class="card-deck">
-                <div class="card border-info">
+                <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-center">Admin?</h4>
                         <p class="card-text">Enter the administrator's password below in order to gain admin privileges.</p>
-                        <form id="form_admin_signin">
+                        <form id="form_admin_signin" class="needs-validation" novalidate>
                             <div class="form-group">
                                 <label for="admin_password">Password</label>
-                                <input type="password" class="form-control" id="admin_password" name="admin_password">
+                                <input type="password" class="form-control" id="admin_password" name="admin_password" required>
+                                <div class="invalid-feedback">
+                                    Please provide a non-empty password.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Login</button>
@@ -49,7 +58,7 @@
                     </div>
                 </div>
 
-                <div class="card border-info">
+                <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-center">Developer?</h4>
                         <p class="card-text">Enter your name below to so it can be added to games in the store.</p>
@@ -70,14 +79,17 @@
                     </div>
                 </div>
 
-                <div class="card border-info">
+                <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-center">Customer?</h4>
                         <p class="card-text">Enter your name below to enter the site as a customer and purchase some games.</p>
-                        <form id="form_cust_signin">
+                        <form id="form_cust_signin" class="needs-validation" novalidate>
                             <div class="form-group">
                                 <label for="cust_username">Username</label>
-                                <input type="text" class="form-control" id="cust_username" name="cust_username" placeholder="Your name goes here">
+                                <input type="text" class="form-control" id="cust_username" name="cust_username" placeholder="Your name goes here" required>
+                                <div class="invalid-feedback">
+                                    Please provide a non-empty username.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Login</button>
@@ -136,12 +148,17 @@
                 url: '../../cgi-bin/513/1/CustSignin.cgi',
                 data: $(this).serialize(),
                 success: function (data, statusText) {
-                    alert('Successfully signed in as "' + data.username + '"!');
+                    if (data.status === 'success' && data.id !== -1)
+                        alert('Successfully signed in as "' + data.username + '"!');
+                    else
+                        alert('Error signing in');
                 },
                 error: function (xhr, statusText, errorText) {
                     alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to sign in.');
                 }
             });
+
+            return false;
         });
 
         function alertBar($alertBar, isSuccess, msg) {
