@@ -4,7 +4,6 @@ use strict;
 use CGI;
 
 my $query = new CGI;
-# $act     = $query->param('act');
 my $name = $query->param('dev_name');
 
 # Remove leading and trailing spacing
