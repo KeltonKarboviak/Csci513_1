@@ -8,7 +8,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <link rel="manifest" href="site.webmanifest">
-        <!-- Place favicon.ico in the root directory -->
 
         <link href="./open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
@@ -33,7 +32,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-center">Admin?</h4>
-                        <p class="card-text">Enter the administrator's password below in order to gain admin privileges.</p>
+                        <p class="card-text h-25">Enter the administrator's password below in order to gain admin privileges.</p>
                         <form id="form_admin_signin" class="needs-validation" novalidate>
                             <div class="form-group">
                                 <label for="admin_password">Password</label>
@@ -52,7 +51,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-center">Developer?</h4>
-                        <p class="card-text">Enter your name below to so it can be added to games in the store.</p>
+                        <p class="card-text h-25">Enter your name below to so it can be added to games in the store.</p>
                         <div class="form_dev_add">
                             <form id="form_dev_add" class="needs-validation" novalidate>
                                 <div class="form-group">
@@ -73,7 +72,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-center">Customer?</h4>
-                        <p class="card-text">Enter your name below to enter the site as a customer and purchase some games.</p>
+                        <p class="card-text h-25">Enter your name below to enter the site as a customer and purchase some games.</p>
                         <form id="form_cust_signin" class="needs-validation" novalidate>
                             <div class="form-group">
                                 <label for="cust_username">Username</label>
@@ -126,55 +125,33 @@
 
                 return false;
             });
-        });
 
-        $('form#form_cust_signin').on('submit', function () {
-            if (!validateForm(this))
+            $('form#form_cust_signin').on('submit', function () {
+                if (!validateForm(this))
+                    return false;
+
+                $alertBar = $('.alert');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../../cgi-bin/513/1/CustSignin.cgi',
+                    data: $(this).serialize(),
+                    success: function (data, statusText) {
+                        if (data.status === 'success' && data.id !== -1) {
+                            alert('Successfully signed in as "' + data.username + '"!');
+                            window.location.replace("./userdash.html?id=" + data.id);
+                        } else {
+                            alert('Error signing in');
+                        }
+                    },
+                    error: function (xhr, statusText, errorText) {
+                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to sign in.');
+                    }
+                });
+
                 return false;
-
-            $alertBar = $('.alert');
-
-            $.ajax({
-                type: 'POST',
-                url: '../../cgi-bin/513/1/CustSignin.cgi',
-                data: $(this).serialize(),
-                success: function (data, statusText) {
-                    if (data.status === 'success' && data.id !== -1)
-                        alert('Successfully signed in as "' + data.username + '"!');
-                        window.location.replace("./userdash.html");
-                    else
-                        alert('Error signing in');
-                },
-                error: function (xhr, statusText, errorText) {
-                    alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to sign in.');
-                }
             });
-
-            return false;
         });
-
-        function alertBar($alertBar, isSuccess, msg) {
-            if (isSuccess)
-                $alertBar.removeClass('alert-warning').addClass('alert-success');
-            else
-                $alertBar.removeClass('alert-success').addClass('alert-warning');
-
-            $alertBar.html(msg);
-
-            $alertBar.fadeIn();
-            setTimeout(function () {
-                $alertBar.fadeOut();
-            }, 5000);
-        }
-
-        function validateForm(form) {
-            if (!form.checkValidity()) {
-                $(form).addClass('was-validated');
-                return false;
-            }
-
-            return true;
-        }
         </script>
     </body>
 </html>
