@@ -101,7 +101,13 @@ body {
    background-color: hsl(199, 8%, 92%);
 }
 
-
+/**
+ * Gives a slight margin to the right of open-iconic icons when used as labels
+ * for text buttons
+ */
+.oi-label {
+    margin-right: 4px;
+}
 
 
 
