@@ -6,7 +6,7 @@ CLASSPATH=$CLASSPATH:/usr/lib/oracle/12.1/client64/lib/ottclasses.zip
 export CLASSPATH
 
 # Load in credentials
-source ../.env
+source ../java.env
 
 echo "Content-Type: application/json"
 echo ""
