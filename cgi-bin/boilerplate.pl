@@ -10,7 +10,6 @@ my $name = $query->param('dev_name');
 $name =~ s/^\s+|\s+$//g;
 
 # For security, remove some Unix metacharacters
-# $name =~ s/;|>|>>|<|\*|\?|\&|\|//g;
 $name =~ s/"/\\"/g;
 
 # Compose a Java command
