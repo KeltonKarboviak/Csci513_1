@@ -9,4 +9,4 @@ source ../venv/bin/activate
 echo "Content-Type: application/json"
 echo ""
 
-/usr/bin/perl SearchGames.pl
+python SearchGames.py

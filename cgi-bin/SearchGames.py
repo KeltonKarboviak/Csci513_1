@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import cgi
 import cx_Oracle as Oracle
 import json
 import os
@@ -7,18 +8,21 @@ import sys
 from dotenv import load_dotenv, find_dotenv
 
 
-def main(argv):
+def main():
     credentials = {
         'user': os.environ.get('ORACLE_USER'),
         'password': os.environ.get('ORACLE_PASSWORD'),
         'dsn': os.environ.get('ORACLE_HOST'),
     }
 
-    # Grab the string of names passed in as the command-line argument (give
-    # empty string if nothing was passed in), then convert string to lowercase,
-    # then split it on all whitespaces to get a list. We want the names in
-    # lowercase for case-insensitive comparison
-    names = (argv[0] if len(argv) > 0 else '').lower().split()
+    form = cgi.FieldStorage()
+
+    # Grab the string of names passed in through CGI (give empty string if
+    # nothing was passed in), then convert string to lowercase, then split it on
+    # all whitespaces to get a list. We want the names in lowercase for
+    # case-insensitive comparison
+    names = form.getvalue('search_keywords', '').strip().lower().split()
+    num_names = len(names)
     sorted_games = []
     status = 'error'
 
@@ -29,7 +33,7 @@ def main(argv):
 
         # Initialize SQL statement with no WHERE so that we'll retrieve data
         # for all games
-        sql = """ \
+        sql = """\
             SELECT g.asin, g.title, d.name
             FROM games g
             JOIN games_developers g_devs
@@ -42,12 +46,12 @@ def main(argv):
         # empty string, otherwise it'll add a LIKE comparison for each name
         # we have
         where_clause = '' \
-            if len(names) == 0 \
-            else 'WHERE ' + ' OR '.join( ["LOWER(d.name) LIKE '%{}%'"] * len(names) ).format(*names)
+            if num_names == 0 \
+            else 'WHERE ' + ' OR '.join( ["LOWER(d.name) LIKE '%' || :{} || '%'"] * num_names ).format( *range(num_names) )
 
         sql += where_clause
 
-        cursor.execute(sql)
+        cursor.execute(sql, names)
         results = cursor.fetchall()
 
         # This dict will be used for storing ASINs and their corresponding
@@ -97,4 +101,4 @@ if __name__ == '__main__':
     # Load in environment variables
     load_dotenv(find_dotenv())
 
-    main(sys.argv[1:])
+    main()
