@@ -99,6 +99,9 @@
 
         <script>
         $(function () {
+            /**
+             * Form submit to add a new Developer to the system
+             */
             $('form#form_dev_add').on('submit', function () {
                 if (!validateForm(this))
                     return false;
@@ -126,6 +129,9 @@
                 return false;
             });
 
+            /**
+             * Form submit for a customer to signin
+             */
             $('form#form_cust_signin').on('submit', function () {
                 if (!validateForm(this))
                     return false;
@@ -137,12 +143,10 @@
                     url: '../../cgi-bin/513/1/CustSignin.cgi',
                     data: $(this).serialize(),
                     success: function (data, statusText) {
-                        if (data.status === 'success' && data.id !== -1) {
-                            alert('Successfully signed in as "' + data.username + '"!');
+                        if (data.status === 'success' && data.id !== -1)
                             window.location.replace("./userdash.html?id=" + data.id);
-                        } else {
+                        else
                             alert('Error signing in');
-                        }
                     },
                     error: function (xhr, statusText, errorText) {
                         alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to sign in.');
