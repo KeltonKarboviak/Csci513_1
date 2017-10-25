@@ -104,7 +104,7 @@
             var url = new URL(window.location);
             var userId = url.searchParams.get('id');
 
-            executeAfterRetrievingUsernameFromId(userId, function(username) {
+            executeAfterFetchingUsernameFromId(userId, function(username) {
                 // This will set the html of every span that expects the user's username
                 $('span.cust-name').html(username);
             });

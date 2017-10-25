@@ -51,7 +51,7 @@ function redirectHomeAfterTimeout(seconds) {
     }, seconds * 1000);
 }
 
-function executeAfterRetrievingUsernameFromId(id, callback) {
+function executeAfterFetchingUsernameFromId(id, callback) {
     $alertBar = $('.alert');
 
     $.ajax({
