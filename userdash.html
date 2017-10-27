@@ -140,32 +140,39 @@
              * Form submit to purchase games
              */
             $('form#form_purchase').on('submit', function () {
-//                if (!validateForm(this))
-//                    return false;
-
                 $alertBar = $('.alert');
+
+                var form = this;
 
                 // Get an array of all the ASINs for the games that were
                 // selected for purchase
                 var selected_asins = $('input[name="is_buying[]"]:checked')
-                        .get()
-                        .map(function(chk) { return chk.value; });
+                    .get()
+                    .map(function(chk) { return chk.value; });
 
-//                $.ajax({
-//                    type: 'POST',
-//                    url: '../../cgi-bin/513/1/AddDeveloper.cgi',
-//                    data: $(this).serialize(),
-//                    success: function (data, statusText) {
-//                        if (data.status === 'success') {
-//                            alertBar($alertBar, true, '<strong>Success!</strong> "' + data.name + '" has been added as a Developer.');
-//                        } else {
-//                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Developer.');
-//                        }
-//                    },
-//                    error: function (xhr, statusText, errorText) {
-//                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Developer.');
-//                    }
-//                });
+                // Now get their matching quantities
+                var selected_qtys = selected_asins.map(function (a) {
+                    return $('input[name="qty_' + a + '"]').val();
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../../cgi-bin/513/1/PurchaseGames.cgi',
+                    data: {id: userId, asins: selected_asins, qtys: selected_qtys},
+                    success: function (data, statusText) {
+                        if (data.status === 'success') {
+                            alertBar($alertBar, true, '<strong>Success!</strong> The games were successfully purchased and added to your account.');
+
+                            // Clear all inputs
+                            form.reset();
+                        } else {
+                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to purchase these games.');
+                        }
+                    },
+                    error: function (xhr, statusText, errorText) {
+                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to purchase these games.');
+                    }
+                });
 
                 return false;
             });
@@ -185,7 +192,7 @@
                             $('<a>').attr('href', '#').html(g.title)
                         ),
                         $('<td>').append(
-                            $('<input>').attr({type: 'text', class: 'form-control form-control-sm'})
+                            $('<input>').attr({type: 'text', class: 'form-control form-control-sm', name: 'qty_' + g.asin})
                         )
                     ).appendTo('table > tbody');
                 });
