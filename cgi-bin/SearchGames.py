@@ -83,8 +83,8 @@ def main():
         sorted_games = map(lambda (k, v): {'asin': k, 'title': v['title']}, sorted_games)
 
         status = 'success'
-    except Oracle.DatabaseError, exception:
-        print exception
+    except Oracle.DatabaseError as e:
+        print e
     finally:
         if cursor is not None:
             cursor.close()
