@@ -4,7 +4,6 @@ import cgi
 import cx_Oracle as Oracle
 import json
 import os
-import sys
 from dotenv import load_dotenv, find_dotenv
 
 
@@ -28,7 +27,7 @@ def main():
 
     connection, cursor = None, None
     try:
-        connection = Oracle.connect (**credentials)
+        connection = Oracle.connect(**credentials)
         cursor = connection.cursor()
 
         # Initialize SQL statement with no WHERE so that we'll retrieve data
