@@ -25,7 +25,7 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
+                            <a id="a_dashboard" class="nav-link" href="#">Dashboard</a>
                         </li>
                     </ul> <!-- /.navbar-nav mr-auto -->
                     <ul class="navbar-nav">
@@ -122,6 +122,9 @@
         $(function () {
             var url = new URL(window.location);
             var userId = url.searchParams.get('id');
+
+            // Set the dashboard hyperlink using the customer's id
+            setDashboardLinkInNavbar(userId);
 
             executeAfterFetchingUsernameFromId(userId, function(username) {
                 // This will set the html of every span that expects the user's username

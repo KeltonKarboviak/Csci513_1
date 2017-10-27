@@ -51,6 +51,10 @@ function redirectHomeAfterTimeout(seconds) {
     }, seconds * 1000);
 }
 
+function setDashboardLinkInNavbar(userId) {
+    $('#a_dashboard').attr('href', './userdash.html?id=' + userId);
+}
+
 function executeAfterFetchingUsernameFromId(id, callback) {
     $alertBar = $('.alert');
 
