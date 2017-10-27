@@ -136,9 +136,6 @@
              * Form submit to search for games
              */
             $('form#form_search').on('submit', function () {
-                // Clear out the table body for upcoming results
-                $('table#table_search > tbody').html('');
-
                 $alertBar = $('.alert');
 
                 $.ajax({
@@ -202,6 +199,9 @@
 
 
             function outputToPurchasesTable(purchases) {
+                // Clear out the table body for upcoming results
+                $('table#table_account > tbody').html('');
+
                 purchases.forEach(function (p) {
                     $('<tr>').append(
                         $('<td>').append(
@@ -214,6 +214,9 @@
             }
 
             function outputToSearchResultsTable(games) {
+                // Clear out the table body for upcoming results
+                $('table#table_search > tbody').html('');
+
                 games.forEach(function (g) {
                     $('<tr>').append(
                         $('<td>').append(
