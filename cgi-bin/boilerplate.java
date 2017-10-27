@@ -1,7 +1,7 @@
 import java.sql.*;
 import oracle.jdbc.pool.OracleDataSource;
 
-public class AddDeveloper {
+public class boilerplate {
     public static void main(String[] args) throws SQLException {
         String name = args[0];
 
