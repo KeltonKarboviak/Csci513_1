@@ -46,15 +46,32 @@
 
         <div class="jumbotron bg-primary text-light">
             <div class="container">
-                <h1 class="display-4">Welcome, <span class="cust-name"></span>!</h1>
-                <p class="lead">Here is your dashboard.</p>
+                <h1 class="display-4 white-on-bright">Welcome, <span class="cust-name"></span>!</h1>
+                <p class="lead white-on-bright">Here is your dashboard.</p>
             </div>
         </div>
 
         <div class="alert alert-success" role="alert" style="display: none;"></div>
 
     	<div class="container">
+            <!-- Table of the customer's past purchases -->
             <h3>Past Purchases</h3>
+
+            <div class="row">
+                <table id="table_account" class="table table-hover table-responsive">
+                    <thead class="thead-default">
+                        <tr>
+                            <th class="w-75">Title</th>
+                            <th>Qty</th>
+                            <th class="text-right">Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
 
             <!-- Table for the customer to search for games -->
             <h3>Game Search</h3>
@@ -87,6 +104,8 @@
 
                 <button type="submit" class="btn btn-outline-success w-100">Purchase</button>
             </form>
+
+            <hr>
         </div> <!-- /.container -->
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -106,6 +125,10 @@
                 $('span.cust-name').html(username);
             });
 
+            executeAfterFetchingPastPurchasesFromId(userId, function(purchases) {
+                outputToPurchasesTable(purchases);
+            });
+
             /**
              * Form submit to search for games
              */
@@ -121,7 +144,7 @@
                     data: $(this).serialize(),
                     success: function (data, statusText) {
                         if (data.status === 'success')
-                            outputGamesToTable(data.games);
+                            outputToSearchResultsTable(data.games);
                         else
                             alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to search for those keywords.');
                     },
@@ -175,7 +198,19 @@
             });
 
 
-            function outputGamesToTable(games) {
+            function outputToPurchasesTable(purchases) {
+                purchases.forEach(function (p) {
+                    $('<tr>').append(
+                        $('<td>').append(
+                            $('<a>').attr('href', './game-details.html?asin=' + p.asin).html(p.title)
+                        ),
+                        $('<td>').html(p.quantity),
+                        $('<td>').html(p.total)
+                    ).appendTo('table#table_account > tbody');
+                });
+            }
+
+            function outputToSearchResultsTable(games) {
                 games.forEach(function (g) {
                     $('<tr>').append(
                         $('<td>').append(
@@ -186,7 +221,7 @@
                             )
                         ),
                         $('<td>').append(
-                            $('<a>').attr('href', '#').html(g.title)
+                            $('<a>').attr('href', './game-details.html?asin=' + g.asin).html(g.title)
                         ),
                         $('<td>').append(
                             $('<input>').attr({type: 'text', class: 'form-control form-control-sm', name: 'qty_' + g.asin})

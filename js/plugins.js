@@ -77,3 +77,25 @@ function executeAfterFetchingUsernameFromId(id, callback) {
         }
     });
 }
+
+function executeAfterFetchingPastPurchasesFromId(id, callback) {
+    $alertBar = $(.alert);
+
+    $.ajax({
+        type: 'POST',
+        url: '../../cgi-bin/GetPastPurchases.cgi',
+        data: {id: id},
+        success: function (data, statusText) {
+            if (data.status === 'success') {
+                // Execute passed in callback function, which will somehow use
+                // the retrieved past purchases
+                callback(data.purchases);
+            } else {
+                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve your past purchases.')
+            }
+        },
+        error: function (xhr, statusText, errorText) {
+            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve your past purchases.');
+        }
+    });
+}
