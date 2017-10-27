@@ -1,14 +1,12 @@
 #!/bin/bash
 
-CLASSPATH=.:/usr/lib/oracle/12.1/client64
-CLASSPATH=$CLASSPATH:/usr/lib/oracle/12.1/client64/lib/ojdbc7.jar
-CLASSPATH=$CLASSPATH:/usr/lib/oracle/12.1/client64/lib/ottclasses.zip
-export CLASSPATH
+export ORACLE_HOME=/usr/lib/oracle/12.1/client64
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib
 
-# Load in credentials
-source ../java.env
+# Activate python virtualenv
+source ../venv/bin/activate
 
 echo "Content-Type: application/json"
 echo ""
 
-/usr/bin/perl  boilerplate.pl
+python boilerplate.py
