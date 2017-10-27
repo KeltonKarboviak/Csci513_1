@@ -82,11 +82,11 @@ function executeAfterFetchingUsernameFromId(id, callback) {
 }
 
 function executeAfterFetchingPastPurchasesFromId(id, callback) {
-    $alertBar = $(.alert);
+    $alertBar = $('.alert');
 
     $.ajax({
         type: 'POST',
-        url: '../../cgi-bin/GetPastPurchases.cgi',
+        url: '../../cgi-bin/513/1/GetPastPurchases.cgi',
         data: {id: id},
         success: function (data, statusText) {
             if (data.status === 'success') {
