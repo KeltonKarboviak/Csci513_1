@@ -56,6 +56,7 @@
     	<div class="container">
             <h3>Past Purchases</h3>
 
+            <!-- Table for the customer to search for games -->
             <h3>Game Search</h3>
 
             <form id="form_search">
@@ -71,25 +72,21 @@
                 </div>
             </form>
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <form id="form_purchase">
-                        <table class="table table-hover table-responsive">
-                            <thead class="thead-default">
-                                <tr>
-                                    <th class="col-sm-1">Purchase?</th>
-                                    <th>Title</th>
-                                    <th class="col-sm-1">Qty</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+            <form id="form_purchase">
+                <table id="table_search" class="table table-hover table-responsive">
+                    <thead class="thead-default">
+                        <tr>
+                            <th>Purchase?</th>
+                            <th class="w-75">Title</th>
+                            <th>Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
 
-                        <button type="submit" class="btn btn-success w-100">Purchase</button>
-                    </form>
-                </div>
-            </div>
+                <button type="submit" class="btn btn-outline-success w-100">Purchase</button>
+            </form>
         </div> <!-- /.container -->
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -114,7 +111,7 @@
              */
             $('form#form_search').on('submit', function () {
                 // Clear out the table body for upcoming results
-                $('table > tbody').html('');
+                $('table#table_search > tbody').html('');
 
                 $alertBar = $('.alert');
 
@@ -194,7 +191,7 @@
                         $('<td>').append(
                             $('<input>').attr({type: 'text', class: 'form-control form-control-sm', name: 'qty_' + g.asin})
                         )
-                    ).appendTo('table > tbody');
+                    ).appendTo('table#table_search > tbody');
                 });
             }
         });
