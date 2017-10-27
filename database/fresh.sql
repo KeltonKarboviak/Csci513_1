@@ -3,12 +3,16 @@
 
 DROP TABLE games_developers;
 DROP TABLE games;
+DROP TABLE games2;
 DROP TABLE developers;
 DROP TABLE customers;
 
 -- Types
 DROP TYPE purchased_games_table;
 DROP TYPE purchased_game_t;
+
+DROP TYPE developers_table;
+DROP TYPE dev_t;
 
 
 -- Now create stuff -----------------------------------------------------------
@@ -25,12 +29,29 @@ CREATE OR REPLACE TYPE purchased_game_t AS OBJECT (
 CREATE OR REPLACE TYPE purchased_games_table AS TABLE OF purchased_game_t
 /
 
+CREATE OR REPLACE TYPE dev_t AS OBJECT (
+    id INTEGER,
+    name VARCHAR(64)
+)
+/
+
+CREATE OR REPLACE TYPE developers_table AS TABLE OF dev_t
+/
+
 -- Tables
 CREATE TABLE games (
     asin CHAR(10) PRIMARY KEY,
     title VARCHAR(64),
     price DECIMAL(6, 2)
 )
+/
+
+CREATE TABLE games2 (
+    asin CHAR(10) PRIMARY KEY,
+    title VARCHAR(64),
+    price DECIMAL(6, 2),
+    developers developers_table
+) NESTED TABLE developers STORE AS nested_developers RETURN AS LOCATOR
 /
 
 CREATE TABLE developers (
