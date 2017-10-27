@@ -56,17 +56,19 @@
             <h3>Past Purchases</h3>
 
             <div class="row">
-                <table id="table_account" class="table table-hover table-responsive">
-                    <thead class="thead-default">
-                        <tr>
-                            <th class="w-75">Title</th>
-                            <th>Qty</th>
-                            <th class="text-right">Total Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="col-md-8 m-auto">
+                    <table id="table_account" class="table table-hover table-responsive">
+                        <thead class="thead-default">
+                            <tr>
+                                <th class="w-75">Title</th>
+                                <th>Qty</th>
+                                <th class="text-right">Total Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <hr>
@@ -74,36 +76,39 @@
             <!-- Table for the customer to search for games -->
             <h3>Game Search</h3>
 
-            <form id="form_search">
-                <div class="input-group">
-                    <label class="sr-only" for="search_keywords">Game Search</label>
-                    <span class="input-group-addon">
-                        <span class="oi oi-magnifying-glass"></span>
-                    </span>
-                    <input type="text" class="form-control" id="search_keywords" name="search_keywords" placeholder="Search for games...">
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-outline-primary">Search</button>
-                    </span>
-                </div>
-            </form>
+            <div class="row">
+                <div class="col-md-8 m-auto">
+                    <form id="form_search">
+                        <div class="input-group">
+                            <label class="sr-only" for="search_keywords">Game Search</label>
+                            <span class="oi oi-magnifying-glass search-icon"></span>
+                            <input type="text" class="form-control search-box" id="search_keywords" name="search_keywords" placeholder="Search for games...">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-outline-primary">Search</button>
+                            </span>
+                        </div>
+                    </form>
 
-            <form id="form_purchase">
-                <table id="table_search" class="table table-hover table-responsive">
-                    <thead class="thead-default">
-                        <tr>
-                            <th>Purchase?</th>
-                            <th class="w-75">Title</th>
-                            <th>Qty</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                    <form id="form_purchase">
+                        <table id="table_search" class="table table-hover table-responsive">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>Purchase?</th>
+                                    <th class="w-75">Title</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
 
-                <button type="submit" class="btn btn-outline-success w-100">Purchase</button>
-            </form>
+                        <button type="submit" class="btn btn-outline-success w-100">Purchase</button>
+                    </form>
+                </div> <!-- /.col-md-8 m-auto -->
+            </div> <!-- /.row -->
 
-            <hr>
+        <hr>
+
         </div> <!-- /.container -->
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -203,7 +208,7 @@
                             $('<a>').attr('href', './game-details.html?asin=' + p.asin).html(p.title)
                         ),
                         $('<td>').html(p.quantity),
-                        $('<td>').html(p.total)
+                        $('<td>').attr('class', 'text-right').html('$ ' + p.total)
                     ).appendTo('table#table_account > tbody');
                 });
             }
