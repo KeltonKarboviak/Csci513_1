@@ -36,9 +36,9 @@ def main():
             SELECT g.asin, g.title, d.name
             FROM games g
             JOIN games_developers g_devs
-                ON g.asin = g_devs.asin
+              ON g.asin = g_devs.asin
             JOIN developers d
-                ON g_devs.developer_id = d.id
+              ON g_devs.developer_id = d.id
         """
 
         # Build the WHERE clause here. If names is empty, it'll just be an
