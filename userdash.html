@@ -128,9 +128,7 @@
                 $('span.cust-name').html(username);
             });
 
-            executeAfterFetchingPastPurchasesFromId(userId, function(purchases) {
-                outputToPurchasesTable(purchases);
-            });
+            reloadPastPurchasesTable(userId);
 
             /**
              * Form submit to search for games
@@ -185,6 +183,8 @@
 
                             // Clear all inputs
                             form.reset();
+
+                            reloadPastPurchasesTable(userId);
                         } else {
                             alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to purchase these games.');
                         }
@@ -197,6 +197,12 @@
                 return false;
             });
 
+
+            function reloadPastPurchasesTable(userId) {
+                executeAfterFetchingPastPurchasesFromId(userId, function(purchases) {
+                    outputToPurchasesTable(purchases);
+                });
+            }
 
             function outputToPurchasesTable(purchases) {
                 // Clear out the table body for upcoming results
