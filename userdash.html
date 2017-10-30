@@ -123,8 +123,9 @@
             var url = new URL(window.location);
             var userId = url.searchParams.get('id');
 
-            // Set the dashboard hyperlink using the customer's id
-            setDashboardLinkInNavbar(userId);
+            // Set the dashboard hyperlink using the customer's id. We also pass
+            // in false since this is not an admin
+            setDashboardLinkInNavbar(false, userId);
 
             executeAfterFetchingUsernameFromId(userId, function(username) {
                 // This will set the html of every span that expects the user's username

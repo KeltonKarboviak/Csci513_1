@@ -51,8 +51,12 @@ function redirectHomeAfterTimeout(seconds) {
     }, seconds * 1000);
 }
 
-function setDashboardLinkInNavbar(userId) {
-    $('#a_dashboard').attr('href', './userdash.html?id=' + userId);
+function setDashboardLinkInNavbar(isAdmin, userId) {
+    var href = isAdmin
+        ? './admindash.html'
+        : './userdash.html?id=' + userId;
+
+    $('#a_dashboard').attr('href', href);
 }
 
 function gameDetailToCard(title, price, devs, userId) {
