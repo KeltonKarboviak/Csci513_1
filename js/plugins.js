@@ -135,10 +135,10 @@ function executeAfterFetchingPastPurchasesFromId(id, callback) {
  *                     for all other values) for whether the details for all
  *                     games in the database should be fetched or not.
  * @param callback function This is a callback function to be called once the
-                            results have been successfully fetched. The callback
-                            will be passed in the resulting array of game
-                            details. It will always be an array regardless of
-                            the value of fetchAll.
+ *                          results have been successfully fetched. The callback
+ *                          will be passed in the resulting array of game
+ *                          details. It will always be an array regardless of
+ *                          the value of fetchAll.
  */
 function executeAfterFetchingGameDetails(asin, fetchAll, callback) {
     $alertBar = $('.alert');
