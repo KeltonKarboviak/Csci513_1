@@ -55,6 +55,24 @@ function setDashboardLinkInNavbar(userId) {
     $('#a_dashboard').attr('href', './userdash.html?id=' + userId);
 }
 
+function gameDetailToCard(title, price, devs, userId) {
+    return $('<ul>', {class: 'list-group'}).append(
+        $('<li>', {class: 'list-group-item'}).text('Title: ' + title),
+        $('<li>', {class: 'list-group-item'}).text('Price: $' + price),
+        devs.map(function (d) {
+            return $('<li>', {class: 'list-group-item'}).append(
+                document.createTextNode('Dev Name: '),
+                $('<a>', {
+                    // We do a check here on userId to see if it has a truthy
+                    // value since this can be called on an Administrator's page
+                    // when listing details for all games.
+                    href: './dev-details.html?dev_id=' + d.id + (userId ? '&id=' + userId : '')
+                }).text(d.name)
+            );
+        })
+    )
+}
+
 function executeAfterFetchingUsernameFromId(id, callback) {
     $alertBar = $('.alert');
 
@@ -103,6 +121,41 @@ function executeAfterFetchingPastPurchasesFromId(id, callback) {
         },
         error: function (xhr, statusText, errorText) {
             alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve your past purchases.');
+        }
+    });
+}
+
+/**
+ * This function will create an AJAX call to the back-end implementation for
+ * fetching details for 1 or all games.
+ *
+ * @param asin string The unique ASIN for the game to be fetched. If a true
+ *                    value is passed in for fetchAll, this will be ignored.
+ * @param fetchAll int A boolean value represented as an int (0 for false, true
+ *                     for all other values) for whether the details for all
+ *                     games in the database should be fetched or not.
+ * @param callback function This is a callback function to be called once the
+                            results have been successfully fetched. The callback
+                            will be passed in the resulting array of game
+                            details. It will always be an array regardless of
+                            the value of fetchAll.
+ */
+function executeAfterFetchingGameDetails(asin, fetchAll, callback) {
+    $alertBar = $('.alert');
+
+    $.ajax({
+        type: 'GET',
+        url: '../../cgi-bin/513/1/GetGameDetails.cgi',
+        data: {asin: asin, fetchAll: fetchAll},
+        success: function (data, statusText) {
+            if (data.status === 'success' && data.details.length > 0) {
+                callback(data.details);
+            } else {
+                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve this game\'s details.');
+            }
+        },
+        error: function (xhr, statusText, errorText) {
+            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve this game\'s details.');
         }
     });
 }
