@@ -73,6 +73,23 @@ function gameDetailToCard(title, price, devs, userId) {
     )
 }
 
+function devDetailToCard(name, games, userId) {
+    return $('<ul>', {class: 'list-group'}).append(
+        $('<li>', {class: 'list-group-item'}).text('Name: ' + name),
+        games.map(function (g) {
+            return $('<li>', {class: 'list-group-item'}).append(
+                document.createTextNode('Game Title: '),
+                $('<a>', {
+                    // We do a check here on userId to see if it has a truthy
+                    // value since this can be called on an Administrator's page
+                    // when listing details for all games.
+                    href: './game-details.html?asin=' + g.asin + (userId ? '&id=' + userId : '')
+                }).text(g.title)
+            );
+        })
+    )
+}
+
 function executeAfterFetchingUsernameFromId(id, callback) {
     $alertBar = $('.alert');
 
@@ -156,6 +173,26 @@ function executeAfterFetchingGameDetails(asin, fetchAll, callback) {
         },
         error: function (xhr, statusText, errorText) {
             alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve this game\'s details.');
+        }
+    });
+}
+
+function executeAfterFetchingDevDetails(devId, callback) {
+    $alertBar = $('.alert');
+
+    $.ajax({
+        type: 'GET',
+        url: '../../cgi-bin/513/1/GetDevDetails.cgi',
+        data: {id: devId},
+        success: function (data, statusText) {
+            if (data.status === 'success' && ! $.isEmptyObject(data.details)) {
+                callback(data.details);
+            } else {
+                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve this developer\'s details.');
+            }
+        },
+        error: function (xhr, statusText, errorText) {
+            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve this developer\'s details.');
         }
     });
 }
