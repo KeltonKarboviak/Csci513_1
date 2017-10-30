@@ -200,3 +200,22 @@ function executeAfterFetchingDevDetails(devId, callback) {
         }
     });
 }
+
+function executeAfterFetchingDevelopers(callback) {
+    $alertBar = $('.alert');
+
+    $.ajax({
+        type: 'GET',
+        url: '../../cgi-bin/513/1/GetAllDevNamesIds.cgi',
+        success: function (data, statusText) {
+            if (data.status === 'success' && data.devs.length > 0) {
+                callback(data.devs);
+            } else {
+                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all developers.');
+            }
+        },
+        error: function (xhr, statusText, errorText) {
+            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all developers.');
+        }
+    });
+}
