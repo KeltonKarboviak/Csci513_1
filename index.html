@@ -98,6 +98,33 @@
         <script>
         $(function () {
             /**
+             * Form submit to for an administrator to signin
+             */
+            $('form#form_admin_signin').on('submit', function () {
+                if (!validateForm(this))
+                    return false;
+
+                $alertBar = $('.alert');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../../cgi-bin/513/1/AdminSignin.cgi',
+                    data: $(this).serialize(),  // name=admin_password
+                    success: function (data, statusText) {
+                        if (data.status === 'success')
+                            window.location.replace('./admindash.html');
+                        else
+                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to sign in as administrator.');
+                    },
+                    error: function (xhr, statusText, errorText) {
+                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to sign in as administrator.');
+                    }
+                });
+
+                return false;
+            });
+
+            /**
              * Form submit to add a new Developer to the system
              */
             $('form#form_dev_add').on('submit', function () {
