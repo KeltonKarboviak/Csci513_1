@@ -14,18 +14,21 @@ def main():
         'dsn': os.environ.get('ORACLE_HOST'),
     }
 
-    DEV_TABLE_TYPE_NAME = 'DEVELOPERS_TABLE'
-
     form = cgi.FieldStorage()
 
     # Get the customer's id
     asin = form.getvalue('asin', '')
 
+    # Get whether we are fetching details for one game or for all games.
+    # This should be converted to an int as it will be later used as a bool
+    fetch_all = int(form.getvalue('fetchAll', '1'))
+
     status = 'error'
 
-    # Initialize the result values with None's and an empty list for developers
-    # since it represents the nested developers_table
-    title, price, devs = None, None, []
+    details = []
+
+    # Initialize sql query params as empty for base case of wanting to fetch all game details
+    query_params = {}
 
     connection, cursor = None, None
     try:
@@ -43,21 +46,29 @@ def main():
             """
 
             sql = """\
-                SELECT title, price, developers
+                SELECT asin, title, price, developers
                 FROM games2
-                WHERE asin = :asin
             """
 
-            cursor.execute(sql, asin=asin)
+            if not bool(fetch_all):
+                # If we don't want to fetch all of the games, then add a WHERE
+                # clause to the sql query and add the desired ASIN to the dict
+                # of query params
+                sql += 'WHERE asin = :asin'
+                query_params['asin'] = asin
 
-            result = cursor.fetchone()
+            cursor.execute(sql, query_params)
 
-            # Check to see if result is not None
-            if result:
-                # Set devs as the nested table object as a list for
-                # when we create the JSON result within the finally block
-                title, price, devs = result
-                devs = devs.aslist()
+            results = cursor.fetchall()
+
+            details = [
+                {
+                    'asin': g[0],
+                    'title': g[1],
+                    'price': '%.2f' % g[2],
+                    'devs': [{'id': d.ID, 'name': d.NAME} for d in g[3].aslist()]
+                } for g in results
+            ]
 
         status = 'success'
     except Oracle.DatabaseError as e:
@@ -66,15 +77,7 @@ def main():
         if cursor is not None:
             cursor.close()
 
-        print json.dumps(
-            {
-                'status': status,
-                'asin': asin,
-                'title': title,
-                'price': price,
-                'developers': [{'id': d.ID, 'name': d.NAME} for d in devs]
-            }
-        )
+        print json.dumps({'status': status, 'details': details})
     # end finally
 # end def main()
 
