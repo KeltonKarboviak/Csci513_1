@@ -16,7 +16,7 @@ def main():
 
     form = cgi.FieldStorage()
 
-    # Get the customer's id
+    # Get the game's ASIN. If fetchAll == 1, then this value is ignored.
     asin = form.getvalue('asin', '')
 
     # Get whether we are fetching details for one game or for all games.
