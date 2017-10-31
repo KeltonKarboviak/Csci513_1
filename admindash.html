@@ -53,52 +53,67 @@
 
     	<div class="container">
 
-            <div class="card-deck">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title text-center">Create New Game</h4>
-                        <p class="card-text h-25">Enter the new game details below:</p>
-                        <form id="form_game_add" class="needs-validation" novalidate>
-                            <div class="form-group">
-                                <label for="asin">ASIN</label>
-                                <input type="text" class="form-control" id="asin" name="asin" placeholder="ASIN goes here" required>
-                                <div class="invalid-feedback">
-                                    Please provide a non-empty ASIN.
-                                </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Create New Game</h4>
+                    <p class="card-text h-25">Enter the new game details below:</p>
+                    <form id="form_game_add" class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <label for="asin">ASIN</label>
+                            <input type="text" class="form-control" id="asin" name="asin" placeholder="ASIN goes here" required>
+                            <div class="invalid-feedback">
+                                Please provide a non-empty ASIN.
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="title">Title</label>
-                                <input type="text" class="form-control" id="title" name="title" placeholder="Title goes here" required>
-                                <div class="invalid-feedback">
-                                    Please provide a non-empty game title.
-                                </div>
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Title goes here" required>
+                            <div class="invalid-feedback">
+                                Please provide a non-empty game title.
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="title">Price</label>
-                                <input type="text" class="form-control" id="price" name="price" placeholder="Price goes here" required>
-                                <div class="invalid-feedback">
-                                    Please provide a non-empty game price.
-                                </div>
+                        <div class="form-group">
+                            <label for="title">Price</label>
+                            <input type="text" class="form-control" id="price" name="price" placeholder="Price goes here" required>
+                            <div class="invalid-feedback">
+                                Please provide a non-empty game price.
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="developers">Developers</label>
-                                <select class="form-control" id="developers" name="developers[]" multiple required>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Please select at least one developer.
-                                </div>
+                        <div class="form-group">
+                            <label for="developers">Developers</label>
+                            <select class="form-control" id="developers" name="developers[]" multiple required>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select at least one developer.
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div> <!-- /.card-body -->
-                </div> <!-- /.card -->
-            </div> <!-- /.card-deck -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="w-100 d-flex justify-content-center btn-group" role="group">
+                    <!-- <div class="d-flex justify-content-center"> -->
+                        <a href="./list-data.html" class="btn btn-outline-dark" id="btn_list_data">
+                            List All Data
+                        </a>
+                        <a href="./manage-devs" class="btn btn-outline-secondary" id="btn_manage_devs">
+                            Manage Developers
+                        </a>
+                        <a href="./manage-games" class="btn btn-outline-info" id="btn_manage_games">
+                            Manage Games
+                        </a>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
 
             <hr>
 
@@ -120,9 +135,6 @@
 
         <script>
         $(function () {
-            var url = new URL(window.location);
-            var userId = url.searchParams.get('id');
-
             $('select#developers').select2({
                 width: '100%',
             });
@@ -196,73 +208,6 @@
                 return false;
             });
 
-            /**
-             * Form submit to search for games
-             */
-            $('form#form_search').on('submit', function () {
-                $alertBar = $('.alert');
-
-                $.ajax({
-                    type: 'GET',
-                    url: '../../cgi-bin/513/1/SearchGames.cgi',
-                    data: $(this).serialize(),
-                    success: function (data, statusText) {
-                        if (data.status === 'success')
-                            outputToSearchResultsTable(data.games);
-                        else
-                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to search for those keywords.');
-                    },
-                    error: function (xhr, statusText, errorText) {
-                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to search for those keywords.');
-                    }
-                });
-
-                return false;
-            });
-
-            /**
-             * Form submit to purchase games
-             */
-            $('form#form_purchase').on('submit', function () {
-                $alertBar = $('.alert');
-
-                var form = this;
-
-                // Get an array of all the ASINs for the games that were
-                // selected for purchase
-                var selected_asins = $('input[name="is_buying[]"]:checked')
-                    .get()
-                    .map(function(chk) { return chk.value; });
-
-                // Now get their matching quantities
-                var selected_qtys = selected_asins.map(function (a) {
-                    return $('input[name="qty_' + a + '"]').val();
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: '../../cgi-bin/513/1/PurchaseGames.cgi',
-                    data: {id: userId, asins: selected_asins, qtys: selected_qtys},
-                    success: function (data, statusText) {
-                        if (data.status === 'success') {
-                            alertBar($alertBar, true, '<strong>Success!</strong> The games were successfully purchased and added to your account.');
-
-                            // Clear all inputs
-                            form.reset();
-
-                            reloadPastPurchasesTable(userId);
-                        } else {
-                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to purchase these games.');
-                        }
-                    },
-                    error: function (xhr, statusText, errorText) {
-                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to purchase these games.');
-                    }
-                });
-
-                return false;
-            });
-
 
             function loadDevelopersIntoSelect() {
                 executeAfterFetchingDevelopers(function (devs) {
@@ -273,50 +218,6 @@
                             .append(new Option(d.name, d.id, false, false))
                             .trigger('change');
                     });
-                });
-            }
-
-            function reloadPastPurchasesTable(userId) {
-                executeAfterFetchingPastPurchasesFromId(userId, function(purchases) {
-                    outputToPurchasesTable(purchases);
-                });
-            }
-
-            function outputToPurchasesTable(purchases) {
-                // Clear out the table body for upcoming results
-                $('table#table_account > tbody').html('');
-
-                purchases.forEach(function (p) {
-                    $('<tr>').append(
-                        $('<td>').append(
-                            $('<a>').attr('href', './game-details.html?asin=' + p.asin + '&id=' + userId).html(p.title)
-                        ),
-                        $('<td>').html(p.quantity),
-                        $('<td>').attr('class', 'text-right').html('$ ' + p.total)
-                    ).appendTo('table#table_account > tbody');
-                });
-            }
-
-            function outputToSearchResultsTable(games) {
-                // Clear out the table body for upcoming results
-                $('table#table_search > tbody').html('');
-
-                games.forEach(function (g) {
-                    $('<tr>').append(
-                        $('<td>').append(
-                            $('<div>').attr('class', 'form-check text-center').append(
-                                $('<label>').attr('class', 'form-check-label').append(
-                                    $('<input>').attr({type: 'checkbox', class: 'form-check-input', name: 'is_buying[]'}).val(g.asin)
-                                )
-                            )
-                        ),
-                        $('<td>').append(
-                            $('<a>').attr('href', './game-details.html?asin=' + g.asin + '&id=' + userId).html(g.title)
-                        ),
-                        $('<td>').append(
-                            $('<input>').attr({type: 'text', class: 'form-control form-control-sm', name: 'qty_' + g.asin})
-                        )
-                    ).appendTo('table#table_search > tbody');
                 });
             }
         });
