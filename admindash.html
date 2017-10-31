@@ -210,8 +210,8 @@
 
 
             function loadDevelopersIntoSelect() {
-                executeAfterFetchingDevelopers(function (devs) {
-                    var $select = $('select#developers').empty()  // Clear out all options first;
+                executeAfterFetchingAllDevelopers(function (devs) {
+                    var $select = $('select#developers').empty()  // Clear out all options first
 
                     devs.forEach(function (d) {
                         $select

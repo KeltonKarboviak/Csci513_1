@@ -9,4 +9,4 @@ source ../venv/bin/activate
 echo "Content-Type: application/json"
 echo ""
 
-python GetAllDevNamesIds.py
+python GetAllDevNames.py

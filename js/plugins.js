@@ -201,12 +201,12 @@ function executeAfterFetchingDevDetails(devId, callback) {
     });
 }
 
-function executeAfterFetchingDevelopers(callback) {
+function executeAfterFetchingAllDevelopers(callback) {
     $alertBar = $('.alert');
 
     $.ajax({
         type: 'GET',
-        url: '../../cgi-bin/513/1/GetAllDevNamesIds.cgi',
+        url: '../../cgi-bin/513/1/GetAllDevNames.cgi',
         success: function (data, statusText) {
             if (data.status === 'success' && data.devs.length > 0) {
                 callback(data.devs);
