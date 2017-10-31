@@ -219,3 +219,41 @@ function executeAfterFetchingAllDevelopers(callback) {
         }
     });
 }
+
+function executeAfterFetchingAllGames(callback) {
+    $alertBar = $('.alert');
+
+    $.ajax({
+        type: 'GET',
+        url: '../../cgi-bin/513/1/GetAllGameTitles.cgi',
+        success: function (data, statusText) {
+            if (data.status === 'success' && data.games.length > 0) {
+                callback(data.games);
+            } else {
+                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all games.');
+            }
+        },
+        error: function (xhr, statusText, errorText) {
+            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all games.');
+        }
+    });
+}
+
+function executeAfterFetchingAllCustomers(callback) {
+    $alertBar = $('.alert');
+
+    $.ajax({
+        type: 'GET',
+        url: '../../cgi-bin/513/1/GetAllCustNames.cgi',
+        success: function (data, statusText) {
+            if (data.status === 'success' && data.customers.length > 0) {
+                callback(data.customers);
+            } else {
+                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all customers.');
+            }
+        },
+        error: function (xhr, statusText, errorText) {
+            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all customers.');
+        }
+    });
+}
