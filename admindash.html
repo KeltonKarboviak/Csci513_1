@@ -85,7 +85,7 @@
 
                             <div class="form-group">
                                 <label for="developers">Developers</label>
-                                <select class="form-control" id="developers" name="developers[]" multiple>
+                                <select class="form-control" id="developers" name="developers[]" multiple required>
                                 </select>
                                 <div class="invalid-feedback">
                                     Please select at least one developer.
@@ -123,7 +123,9 @@
             var url = new URL(window.location);
             var userId = url.searchParams.get('id');
 
-            $('select#developers').select2();
+            $('select#developers').select2({
+                width: '100%',
+            });
 
             // This will load the select2 element with all the developers in the
             // database.
@@ -134,6 +136,46 @@
             setDashboardLinkInNavbar(true, null);
 
             // reloadPastPurchasesTable(userId);
+
+            $('form#form_game_add').on('submit', function() {
+                if (!validateForm(this))
+                    return false;
+
+                $alertBar = $('.alert');
+
+                // Get the values from the form
+                var asin = $('input#asin').val();
+                var title = $('input#title').val();
+                var price = $('input#price').val();
+
+                var $selected = $('select#developers').find('option:selected')
+
+                var dev_ids = $selected.map(function (idx, option) {
+                    return option.value;
+                }).get();
+
+                var dev_names = $selected.map(function (idx, option) {
+                    return option.innerText;
+                }).get();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../../cgi-bin/513/1/AddGame.cgi',
+                    data: {asin: asin, title: title, price: price, dev_ids: dev_ids, dev_names: dev_names}, //$(this).serialize(),
+                    success: function (data, statusText) {
+                        if (data.status === 'success') {
+                            alertBar($alertBar, true, '<strong>Success!</strong> "' + data.title + '" has been added as a Game.');
+                        } else {
+                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Game.');
+                        }
+                    },
+                    error: function (xhr, statusText, errorText) {
+                        alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Game.');
+                    }
+                });
+
+                return false;
+            });
 
             $('form#form_system_reset').on('submit', function () {
                 $alertBar = $('.alert');
