@@ -13,7 +13,7 @@ def main():
         'dsn': os.environ.get('ORACLE_HOST'),
     }
 
-    developers = []
+    games = []
 
     status = 'error'
 
@@ -23,15 +23,15 @@ def main():
             cursor = connection.cursor()
 
             sql = """\
-                SELECT id, name
-                FROM developers
+                SELECT asin, title
+                FROM games2
             """
 
             cursor.execute(sql)
 
             results = cursor.fetchall()
 
-            developers = [{'id': d[0], 'name': d[1]} for d in results]
+            games = [{'asin': g[0], 'title': g[1]} for g in results]
 
         status = 'success'
     except Oracle.DatabaseError as e:
@@ -40,7 +40,7 @@ def main():
         if cursor is not None:
             cursor.close()
 
-        print json.dumps({'status': status, 'devs': developers})
+        print json.dumps({'status': status, 'games': games})
     # end finally
 # end def main()
 

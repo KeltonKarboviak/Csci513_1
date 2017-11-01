@@ -54,32 +54,23 @@
 
             <div class="card-deck">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body px-0 pb-0">
                         <h4 class="card-title text-center">Games</h4>
-                        <!-- <p class="card-text h-25">Enter the new game details below:</p> -->
-                        <div id="games-container">
-
-                        </div>
+                        <ul class="px-0 mb-0" id="games-container"></ul>
                     </div> <!-- /.card-body -->
                 </div> <!-- /.card -->
 
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body px-0 pb-0">
                         <h4 class="card-title text-center">Developers</h4>
-                        <!-- <p class="card-text h-25">Enter the new game details below:</p> -->
-                        <ul class="list-group" id="developers-container">
-
-                        </ul>
+                        <ul class="px-0 mb-0" class="list-group" id="developers-container"></ul>
                     </div> <!-- /.card-body -->
                 </div> <!-- /.card -->
 
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body px-0 pb-0">
                         <h4 class="card-title text-center">Customers</h4>
-                        <!-- <p class="card-text h-25">Enter the new game details below:</p> -->
-                        <div id="customers-container">
-
-                        </div>
+                        <ul class="px-0 mb-0" id="customers-container"></ul>
                     </div> <!-- /.card-body -->
                 </div> <!-- /.card -->
             </div> <!-- /.card-deck -->
@@ -105,7 +96,7 @@
 
             function loadGameTitles() {
                 executeAfterFetchingAllGames(function (games) {
-                    $('div#games-container')
+                    $('#games-container')
                         .empty()  // Clear out first
                         .append(
                             games.map(function (g) {
@@ -119,8 +110,8 @@
 
             function loadDeveloperNames() {
                 executeAfterFetchingAllDevelopers(function (devs) {
-                    $('div#developers-container')
-                        .empty();  // Clear out first
+                    $('#developers-container')
+                        .empty()  // Clear out first
                         .append(
                             devs.map(function (d) {
                                 return $('<li>', {class: 'list-group-item'}).append(
@@ -133,10 +124,10 @@
 
             function loadCustomerNames() {
                 executeAfterFetchingAllCustomers(function (customers) {
-                    $('div#customers-container')
+                    $('#customers-container')
                         .empty()  // Clear out first
                         .append(
-                            customers.map(function (g) {
+                            customers.map(function (c) {
                                 return $('<li>', {class: 'list-group-item'}).append(
                                     $('<a>', {href: './customer-details.html?id' + c.id + '&admin=y'}).text(c.username)
                                 );
