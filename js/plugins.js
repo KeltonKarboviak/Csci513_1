@@ -59,7 +59,12 @@ function setDashboardLinkInNavbar(isAdmin, userId) {
     $('#a_dashboard').attr('href', href);
 }
 
-function gameDetailToCard(title, price, devs, userId) {
+function insertUsernameInPlaceholders(username) {
+    // This will set the html of every span that expects the user's username
+    $('span.cust-name').html(username);
+}
+
+function gameDetailToCard(title, price, devs, params) {
     return $('<ul>', {class: 'list-group'}).append(
         $('<li>', {class: 'list-group-item'}).text('Title: ' + title),
         $('<li>', {class: 'list-group-item'}).text('Price: $' + price),
@@ -67,27 +72,27 @@ function gameDetailToCard(title, price, devs, userId) {
             return $('<li>', {class: 'list-group-item'}).append(
                 document.createTextNode('Dev Name: '),
                 $('<a>', {
-                    // We do a check here on userId to see if it has a truthy
-                    // value since this can be called on an Administrator's page
-                    // when listing details for all games.
-                    href: './dev-details.html?dev_id=' + d.id + (userId ? '&id=' + userId : '')
+                    // We append the passed in url params to the end of the href
+                    // since it contains the current values of the user's id
+                    // & whether it's an admin or not
+                    href: './dev-details.html?dev_id=' + d.id + '&' + $.param(params)
                 }).text(d.name)
             );
         })
     )
 }
 
-function devDetailToCard(name, games, userId) {
+function devDetailToCard(name, games, params) {
     return $('<ul>', {class: 'list-group'}).append(
         $('<li>', {class: 'list-group-item'}).text('Name: ' + name),
         games.map(function (g) {
             return $('<li>', {class: 'list-group-item'}).append(
                 document.createTextNode('Game Title: '),
                 $('<a>', {
-                    // We do a check here on userId to see if it has a truthy
-                    // value since this can be called on an Administrator's page
-                    // when listing details for all games.
-                    href: './game-details.html?asin=' + g.asin + (userId ? '&id=' + userId : '')
+                    // We append the passed in url params to the end of the href
+                    // since it contains the current values of the user's id
+                    // & whether it's an admin or not
+                    href: './game-details.html?asin=' + g.asin + '&' + $.param(params)
                 }).text(g.title)
             );
         })

@@ -71,15 +71,24 @@
         $(function () {
             var url = new URL(window.location);
             var userId = url.searchParams.get('id');
+            var isAdmin = url.searchParams.get('admin');
             var asin = url.searchParams.get('asin');
 
-            // Set the dashboard hyperlink using the customer's id
-            setDashboardLinkInNavbar(userId);
+            var urlParams = {id: userId, admin: isAdmin};
 
-            executeAfterFetchingUsernameFromId(userId, function(username) {
-                // This will set the html of every span that expects the user's username
-                $('span.cust-name').html(username);
-            });
+            // The isAdmin parameter depends on whether the 'admin' url param
+            // is passed. If so, it will make isAdmin true setting the dashbaord
+            // link properly to the admin dashboard. Otherwise, it will be the
+            // user's dashboard.
+            setDashboardLinkInNavbar(isAdmin, userId);
+
+            if (isAdmin) {
+                // The user is an Admin
+                insertUsernameInPlaceholders('Admin');
+            } else {
+                // The user is a customer, so we need their customer id
+                executeAfterFetchingUsernameFromId(userId, insertUsernameInPlaceholders);
+            }
 
             executeAfterFetchingGameDetails(asin, 0, function (details) {
                 // The back-end script will always return the game details
@@ -92,7 +101,7 @@
             function outputGameDetails(title, price, devs) {
                 $('div#details-container')
                     .html('')
-                    .append(gameDetailToCard(title, price, devs, userId));
+                    .append(gameDetailToCard(title, price, devs, urlParams));
             }
         });
         </script>
