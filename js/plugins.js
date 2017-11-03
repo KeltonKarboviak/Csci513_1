@@ -64,6 +64,21 @@ function insertUsernameInPlaceholders(username) {
     $('span.cust-name').html(username);
 }
 
+function purchasesToTable(purchases, params) {
+    // Clear out the table body for upcoming results
+    $('table#table_account > tbody').empty('');
+
+    purchases.forEach(function (p) {
+        $('<tr>').append(
+            $('<td>').append(
+                $('<a>').attr('href', './game-details.html?asin=' + p.asin + '&' + $.param(params)).html(p.title)
+            ),
+            $('<td>').html(p.quantity),
+            $('<td>').attr('class', 'text-right').html('$ ' + p.total)
+        ).appendTo('table#table_account > tbody');
+    });
+}
+
 function gameDetailToCard(title, price, devs, params) {
     return $('<ul>', {class: 'list-group'}).append(
         $('<li>', {class: 'list-group-item'}).text('Title: ' + title),

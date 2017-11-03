@@ -203,23 +203,8 @@
 
 
             function reloadPastPurchasesTable(userId) {
-                executeAfterFetchingPastPurchasesFromId(userId, function(purchases) {
-                    outputToPurchasesTable(purchases);
-                });
-            }
-
-            function outputToPurchasesTable(purchases) {
-                // Clear out the table body for upcoming results
-                $('table#table_account > tbody').html('');
-
-                purchases.forEach(function (p) {
-                    $('<tr>').append(
-                        $('<td>').append(
-                            $('<a>').attr('href', './game-details.html?asin=' + p.asin + '&id=' + userId).html(p.title)
-                        ),
-                        $('<td>').html(p.quantity),
-                        $('<td>').attr('class', 'text-right').html('$ ' + p.total)
-                    ).appendTo('table#table_account > tbody');
+                executeAfterFetchingPastPurchasesFromId(userId, function (purchases) {
+                    purchasesToTable(purchases, {id: userId});
                 });
             }
 
