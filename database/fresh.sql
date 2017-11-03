@@ -77,4 +77,29 @@ CREATE TABLE customers (
 ) NESTED TABLE account STORE AS nested_account RETURN AS LOCATOR
 /
 
+-- Procedures
+CREATE OR REPLACE PROCEDURE sp_DeleteDev(dev_id developers.id%type) AS
+    a games2.asin%type;
+    CURSOR asinCursor IS SELECT asin FROM games2;
+BEGIN
+    OPEN asinCursor;
+    LOOP
+        -- Retrieve each ASIN from the games2 table
+        FETCH asinCursor INTO a;
+        EXIT WHEN asinCursor%NOTFOUND;
+
+        -- We'll then search that ASIN's nested developers table for the
+        -- matching dev_id, then delete it
+        DELETE FROM TABLE (
+            SELECT developers FROM games2 WHERE asin = a
+        ) WHERE id = dev_id;
+    END LOOP;
+
+    -- Lastly, we'll delete the developer from the developers table
+    DELETE FROM developers WHERE id = dev_id;
+
+    CLOSE asinCursor;
+END;
+/
+
 commit;

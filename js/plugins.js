@@ -45,6 +45,12 @@ function validateForm(form) {
     return true;
 }
 
+function redirectToDashboardAfterTimeout(dashboard_link, seconds) {
+    setTimeout(function () {
+        window.location.replace(dashboard_link);
+    }, seconds * 1000);
+}
+
 function redirectHomeAfterTimeout(seconds) {
     setTimeout(function () {
         window.location.replace('./index.html');
@@ -228,7 +234,7 @@ function executeAfterFetchingAllDevelopers(callback) {
         type: 'GET',
         url: '../../cgi-bin/513/1/GetAllDevNames.cgi',
         success: function (data, statusText) {
-            if (data.status === 'success' && data.devs.length > 0) {
+            if (data.status === 'success') {
                 callback(data.devs);
             } else {
                 alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all developers.');
