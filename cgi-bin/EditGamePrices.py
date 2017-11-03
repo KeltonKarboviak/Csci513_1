@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import cgi
 import cx_Oracle as Oracle
 import json
 import os
@@ -13,7 +14,13 @@ def main():
         'dsn': os.environ.get('ORACLE_HOST'),
     }
 
-    games = []
+    form = cgi.FieldStorage()
+
+    # Get the asins and prices
+    asins = form.getlist('asins[]')
+    prices = form.getlist('prices[]')
+
+    params = [{'asin': g[0], 'price': g[1]} for g in zip(asins, prices)]
 
     status = 'error'
 
@@ -23,20 +30,13 @@ def main():
             cursor = connection.cursor()
 
             sql = """\
-                SELECT asin, title, price
-                FROM games2
-                ORDER BY title ASC
+                UPDATE games2
+                SET price = :price
+                WHERE asin = :asin
             """
 
-            cursor.execute(sql)
-
-            games = [
-                {
-                    'asin': g[0],
-                    'title': g[1],
-                    'price': '%.2f' % g[2],
-                } for g in cursor
-            ]
+            cursor.prepare(sql)
+            cursor.executemany(None, params)
 
         status = 'success'
     except Oracle.DatabaseError as e:
@@ -45,7 +45,7 @@ def main():
         if cursor is not None:
             cursor.close()
 
-        print json.dumps({'status': status, 'games': games})
+        print json.dumps({'status': status})
     # end finally
 # end def main()
 
