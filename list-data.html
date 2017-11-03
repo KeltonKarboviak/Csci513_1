@@ -101,7 +101,7 @@
                         .append(
                             games.map(function (g) {
                                 return $('<li>', {class: 'list-group-item'}).append(
-                                    $('<a>', {href: './game-details.html?asin' + g.asin + '&admin=y'}).text(g.title)
+                                    $('<a>', {href: './game-details.html?asin=' + g.asin + '&admin=y'}).text(g.title)
                                 );
                             })
                         );
@@ -115,7 +115,7 @@
                         .append(
                             devs.map(function (d) {
                                 return $('<li>', {class: 'list-group-item'}).append(
-                                    $('<a>', {href: './dev-details.html?dev_id' + d.id + '&admin=y'}).text(d.name)
+                                    $('<a>', {href: './dev-details.html?dev_id=' + d.id + '&admin=y'}).text(d.name)
                                 );
                             })
                         );
@@ -129,7 +129,7 @@
                         .append(
                             customers.map(function (c) {
                                 return $('<li>', {class: 'list-group-item'}).append(
-                                    $('<a>', {href: './customer-details.html?id' + c.id + '&admin=y'}).text(c.username)
+                                    $('<a>', {href: './customer-details.html?cust_id=' + c.id + '&admin=y'}).text(c.username)
                                 );
                             })
                         );
