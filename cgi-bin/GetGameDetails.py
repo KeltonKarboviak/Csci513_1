@@ -36,16 +36,6 @@ def main():
             cursor = connection.cursor()
 
             sql = """\
-                SELECT *
-                FROM games_developer g_devs
-                JOIN games g
-                  ON g_devs.asin = g.asin
-                JOIN developers d
-                  ON g_devs.developer_id = d.id
-                WHERE g.asin = :asin
-            """
-
-            sql = """\
                 SELECT asin, title, price, developers
                 FROM games2
             """
