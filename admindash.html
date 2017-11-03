@@ -84,7 +84,7 @@
 
                         <div class="form-group">
                             <label for="developers">Developers</label>
-                            <select class="form-control" id="developers" name="developers[]" multiple required>
+                            <select class="form-control" id="developers" name="developers[]" multiple>
                             </select>
                             <div class="invalid-feedback">
                                 Please select at least one developer.
@@ -136,6 +136,7 @@
         <script>
         $(function () {
             $('select#developers').select2({
+                placeholder: 'Choose developers here',
                 width: '100%',
             });
 
@@ -147,8 +148,16 @@
             // in true for the isAdmin parameter
             setDashboardLinkInNavbar(true, null);
 
+            function resetForm(form) {
+                form.reset();
+                $('select#developers').val(null).trigger('change');
+                $(form).removeClass('was-validated');
+            }
+
             $('form#form_game_add').on('submit', function() {
-                if (!validateForm(this))
+                var form = this;
+
+                if (!validateForm(form))
                     return false;
 
                 $alertBar = $('.alert');
@@ -175,6 +184,9 @@
                     success: function (data, statusText) {
                         if (data.status === 'success') {
                             alertBar($alertBar, true, '<strong>Success!</strong> "' + data.title + '" has been added as a Game.');
+
+                            // Clear all inputs
+                            resetForm(form);
                         } else {
                             alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to add the new Game.');
                         }
