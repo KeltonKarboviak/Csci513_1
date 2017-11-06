@@ -10,6 +10,13 @@
         <link href="./open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <link href="css/main.css" rel="stylesheet">
+
+        <style>
+        #games-container>li:hover .oi {
+            color: #0059B6;
+            display: block!important;
+        }
+        </style>
     </head>
     <body>
         <!--[if lte IE 9]>
@@ -101,7 +108,10 @@
                         .append(
                             games.map(function (g) {
                                 return $('<li>', {class: 'list-group-item'}).append(
-                                    $('<a>', {href: './game-details.html?asin=' + g.asin + '&admin=y'}).text(g.title)
+                                    $('<a>', {href: './game-details.html?asin=' + g.asin + '&admin=y', text: g.title}),
+                                    $('<a>', {href: './edit-game-details.html?asin=' + g.asin}).append(
+                                        $('<span>', {class: 'oi oi-pencil float-right d-none'})
+                                    )
                                 );
                             })
                         );
