@@ -102,4 +102,16 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE FUNCTION fnc_DidDevelop(g_asin games2.asin%type, dev_id developers.id%type) RETURN INTEGER AS
+    rows_found INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO rows_found
+    FROM games2 g, TABLE (g.developers) d
+    WHERE g.asin = g_asin
+      AND d.id = dev_id;
+
+    RETURN rows_found;
+END;
+/
+
 commit;

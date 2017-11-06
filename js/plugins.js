@@ -89,18 +89,19 @@ function gameDetailToCard(title, price, devs, params) {
     return $('<ul>', {class: 'list-group'}).append(
         $('<li>', {class: 'list-group-item'}).text('Title: ' + title),
         $('<li>', {class: 'list-group-item'}).text('Price: $' + price),
-        devs.map(function (d) {
-            return $('<li>', {class: 'list-group-item'}).append(
-                document.createTextNode('Dev Name: '),
-                $('<a>', {
-                    // We append the passed in url params to the end of the href
-                    // since it contains the current values of the user's id
-                    // & whether it's an admin or not
-                    href: './dev-details.html?dev_id=' + d.id + '&' + $.param(params)
-                }).text(d.name)
-            );
-        })
-    )
+        devs.filter(function(d) { return d.selected; })  // Get only the developers that are associated with this game
+            .map(function (d) {
+                return $('<li>', {class: 'list-group-item'}).append(
+                    document.createTextNode('Dev Name: '),
+                    $('<a>', {
+                        // We append the passed in url params to the end of the href
+                        // since it contains the current values of the user's id
+                        // & whether it's an admin or not
+                        href: './dev-details.html?dev_id=' + d.id + '&' + $.param(params)
+                    }).text(d.name)
+                );
+            })
+    );
 }
 
 function devDetailToCard(name, games, params) {
@@ -117,7 +118,7 @@ function devDetailToCard(name, games, params) {
                 }).text(g.title)
             );
         })
-    )
+    );
 }
 
 function executeAfterFetchingUsernameFromId(id, callback) {
@@ -176,27 +177,22 @@ function executeAfterFetchingPastPurchasesFromId(id, callback) {
  * This function will create an AJAX call to the back-end implementation for
  * fetching details for 1 or all games.
  *
- * @param asin string The unique ASIN for the game to be fetched. If a true
- *                    value is passed in for fetchAll, this will be ignored.
- * @param fetchAll int A boolean value represented as an int (0 for false, true
- *                     for all other values) for whether the details for all
- *                     games in the database should be fetched or not.
+ * @param asin string The unique ASIN for the game to be fetched.
  * @param callback function This is a callback function to be called once the
  *                          results have been successfully fetched. The callback
- *                          will be passed in the resulting array of game
- *                          details. It will always be an array regardless of
- *                          the value of fetchAll.
+ *                          will be passed in the resulting title, price, & devs
+ *                          from the database.
  */
-function executeAfterFetchingGameDetails(asin, fetchAll, callback) {
+function executeAfterFetchingGameDetails(asin, callback) {
     $alertBar = $('.alert');
 
     $.ajax({
         type: 'GET',
         url: '../../cgi-bin/513/1/GetGameDetails.cgi',
-        data: {asin: asin, fetchAll: fetchAll},
+        data: {asin: asin},
         success: function (data, statusText) {
-            if (data.status === 'success' && data.details.length > 0) {
-                callback(data.details);
+            if (data.status === 'success') {
+                callback(data.title, data.price, data.devs);
             } else {
                 alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve this game\'s details.');
             }

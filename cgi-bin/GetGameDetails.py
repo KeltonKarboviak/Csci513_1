@@ -16,49 +16,41 @@ def main():
 
     form = cgi.FieldStorage()
 
-    # Get the game's ASIN. If fetchAll == 1, then this value is ignored.
     asin = form.getvalue('asin', '')
 
-    # Get whether we are fetching details for one game or for all games.
-    # This should be converted to an int as it will be later used as a bool
-    fetch_all = int(form.getvalue('fetchAll', '1'))
-
     status = 'error'
-
-    details = []
-
-    # Initialize sql query params as empty for base case of wanting to fetch all game details
-    query_params = {}
 
     connection, cursor = None, None
     try:
         with Oracle.connect(**credentials) as connection:
             cursor = connection.cursor()
 
+            # First get game asin, title, & price
             sql = """\
-                SELECT asin, title, price, developers
+                SELECT asin, title, price
                 FROM games2
+                WHERE asin = :asin
             """
 
-            if not bool(fetch_all):
-                # If we don't want to fetch all of the games, then add a WHERE
-                # clause to the sql query and add the desired ASIN to the dict
-                # of query params
-                sql += 'WHERE asin = :asin'
-                query_params['asin'] = asin
+            cursor.execute(sql, asin=asin)
 
-            cursor.execute(sql, query_params)
+            result = cursor.fetchone()
 
-            results = cursor.fetchall()
+            asin = result[0]
+            title = result[1]
+            price = result[2]
 
-            details = [
-                {
-                    'asin': g[0],
-                    'title': g[1],
-                    'price': '%.2f' % g[2],
-                    'devs': [{'id': d.ID, 'name': d.NAME} for d in g[3].aslist()]
-                } for g in results
-            ]
+            # Now get all the developers, but give the developers that are
+            # associated with this ASIN a flag so that they can be pre-selected
+            # in the dropdown box
+            sql = """\
+                SELECT id, name, fnc_DidDevelop(:asin, id) AS did_develop
+                FROM developers
+            """
+
+            cursor.execute(sql, asin=asin)
+
+            devs = [{'id': d[0], 'name': d[1], 'selected': d[2] > 0} for d in cursor]
 
         status = 'success'
     except Oracle.DatabaseError as e:
@@ -67,7 +59,15 @@ def main():
         if cursor is not None:
             cursor.close()
 
-        print json.dumps({'status': status, 'details': details})
+        print json.dumps(
+            {
+                'status': status,
+                'asin': asin,
+                'title': title,
+                'price': price,
+                'devs': devs
+            }
+        )
     # end finally
 # end def main()
 
