@@ -36,23 +36,24 @@ def main():
 
             result = cursor.fetchone()
 
-            asin = result[0]
-            title = result[1]
-            price = result[2]
+            if result:
+                asin = result[0]
+                title = result[1]
+                price = result[2]
 
-            # Now get all the developers, but give the developers that are
-            # associated with this ASIN a flag so that they can be pre-selected
-            # in the dropdown box
-            sql = """\
-                SELECT id, name, fnc_DidDevelop(:asin, id) AS did_develop
-                FROM developers
-            """
+                # Now get all the developers, but give the developers that are
+                # associated with this ASIN a flag so that they can be pre-selected
+                # in the dropdown box
+                sql = """\
+                    SELECT id, name, fnc_DidDevelop(:asin, id) AS did_develop
+                    FROM developers
+                """
 
-            cursor.execute(sql, asin=asin)
+                cursor.execute(sql, asin=asin)
 
-            devs = [{'id': d[0], 'name': d[1], 'selected': d[2] > 0} for d in cursor]
+                devs = [{'id': d[0], 'name': d[1], 'selected': d[2] > 0} for d in cursor]
 
-        status = 'success'
+                status = 'success'
     except Oracle.DatabaseError as e:
         print e
     finally:
