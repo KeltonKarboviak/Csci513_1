@@ -65,7 +65,7 @@ def main():
                 'status': status,
                 'asin': asin,
                 'title': title,
-                'price': price,
+                'price': '%.2f' % price,
                 'devs': devs
             }
         )
