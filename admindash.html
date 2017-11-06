@@ -202,18 +202,22 @@
             $('form#form_system_reset').on('submit', function () {
                 $alertBar = $('.alert');
 
-                confirm('Are you sure?');
-
-                // $.ajax({
-                //     type: 'POST',
-                //     url: '../../cgi-bin/513/1/SystemReset.cgi',
-                //     success: function (data, statusText) {
-                //
-                //     },
-                //     error: function (xhr, statusText, errorText) {
-                //
-                //     }
-                // });
+                if (confirm('Are you sure?')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '../../cgi-bin/513/1/SystemReset.cgi',
+                        success: function (data, statusText) {
+                            if (data.status === 'success') {
+                                alertBar($alertBar, true, '<strong>Success!</strong> The system was successfully reset.');
+                            } else {
+                                alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to reset the system.');
+                            }
+                        },
+                        error: function (xhr, statusText, errorText) {
+                            alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to reset the system.');
+                        }
+                    });
+                }
 
                 return false;
             });
