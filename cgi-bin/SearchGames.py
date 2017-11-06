@@ -34,11 +34,7 @@ def main():
         # for all games
         sql = """\
             SELECT g.asin, g.title, d.name
-            FROM games g
-            JOIN games_developers g_devs
-              ON g.asin = g_devs.asin
-            JOIN developers d
-              ON g_devs.developer_id = d.id
+            FROM games2 g, TABLE(g.developers) d
         """
 
         # Build the WHERE clause here. If names is empty, it'll just be an
