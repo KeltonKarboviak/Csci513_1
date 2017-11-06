@@ -25,7 +25,7 @@ unzip open-iconic.zip
 rm open-iconic.zip
 ```
 
-4. Download a local version of jQuery
+4. Download a local version of jQuery. This is used as a fallback.
 
 ```bash
 mkdir js/vendor
@@ -54,7 +54,7 @@ deactivate
 javac cgi-bin/*.java
 ```
 
-7. Update file permissions
+7. Update file permissions.
 
 ```bash
 chmod -R 755 cgi-bin
