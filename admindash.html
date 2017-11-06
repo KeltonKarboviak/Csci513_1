@@ -167,20 +167,20 @@
                 var title = $('input#title').val();
                 var price = $('input#price').val();
 
-                var $selected = $('select#developers').find('option:selected')
+                var $selected = $('select#developers').find('option:selected');
 
-                var dev_ids = $selected.map(function (idx, option) {
+                var devIds = $selected.map(function (idx, option) {
                     return option.value;
                 }).get();
 
-                var dev_names = $selected.map(function (idx, option) {
+                var devNames = $selected.map(function (idx, option) {
                     return option.innerText;
                 }).get();
 
                 $.ajax({
                     type: 'POST',
                     url: '../../cgi-bin/513/1/AddGame.cgi',
-                    data: {asin: asin, title: title, price: price, dev_ids: dev_ids, dev_names: dev_names}, //$(this).serialize(),
+                    data: {asin: asin, title: title, price: price, dev_ids: devIds, dev_names: devNames},
                     success: function (data, statusText) {
                         if (data.status === 'success') {
                             alertBar($alertBar, true, '<strong>Success!</strong> "' + data.title + '" has been added as a Game.');
@@ -221,13 +221,13 @@
 
             function loadDevelopersIntoSelect() {
                 executeAfterFetchingAllDevelopers(function (devs) {
-                    var $select = $('select#developers').empty()  // Clear out all options first
-
-                    devs.forEach(function (d) {
-                        $select
-                            .append(new Option(d.name, d.id, false, false))
-                            .trigger('change');
-                    });
+                    $('select#developers')
+                        .empty()  // Clear out all options first
+                        .append(
+                            devs.map(function (d) {
+                                return new Option(d.name, d.id, d.selected, d.selected);
+                            })
+                        ).trigger('change');
                 });
             }
         });

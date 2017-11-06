@@ -114,9 +114,7 @@
                                 $('<td>', {text: g.title}),
                                 $('<td>').append(
                                     $('<div>', {class: 'input-group'}).append(
-                                        $('<div>', {class: 'input-group-addon'}).append(
-                                            $('<span>', {class: 'oi oi-dollar'})
-                                        ),
+                                        $('<div>', {class: 'input-group-addon', text: '$'}),
                                         $('<input>', {type: 'text', class: 'form-control', id: g.asin, name: 'prices[]', value: g.price, required: 'required'})
                                     )
                                 )

@@ -29,9 +29,7 @@ def main():
 
             cursor.execute(sql)
 
-            results = cursor.fetchall()
-
-            developers = [{'id': d[0], 'name': d[1]} for d in results]
+            developers = [{'id': d[0], 'name': d[1]} for d in cursor]
 
         status = 'success'
     except Oracle.DatabaseError as e:
