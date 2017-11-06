@@ -37,7 +37,7 @@ def main():
         if cursor is not None:
             cursor.close()
 
-        print json.dumps({'status': status, 'username': username, 'id': int(user_id)})
+        print json.dumps({'status': status, 'username': username, 'id': int(user_id.getvalue())})
     # end finally
 # end def main()
 
