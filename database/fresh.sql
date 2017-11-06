@@ -114,4 +114,25 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE FUNCTION fnc_CustSigninOrRegister(user_name customers.username%type) RETURN customers.id%type AS
+    rows_found INTEGER;
+    user_id customers.id%type;
+BEGIN
+    SELECT COUNT(*) INTO rows_found
+    FROM customers
+    WHERE username = user_name;
+
+    IF rows_found <= 0 THEN
+        INSERT INTO customers (username, account)
+        VALUES (user_name, purchased_games_table());
+    END IF;
+
+    SELECT id INTO user_id
+    FROM customers
+    WHERE username = user_name;
+
+    RETURN user_id;
+END;
+/
+
 commit;
