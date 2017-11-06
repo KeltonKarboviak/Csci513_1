@@ -1,8 +1,6 @@
 
 -- Drop stuff first -----------------------------------------------------------
 
-DROP TABLE games_developers;
-DROP TABLE games;
 DROP TABLE games2;
 DROP TABLE developers;
 DROP TABLE customers;

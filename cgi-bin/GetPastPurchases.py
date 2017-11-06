@@ -30,7 +30,7 @@ def main():
             sql = """\
                 SELECT g.title, a.asin, a.quantity, a.total
                 FROM customers c, TABLE(c.account) a
-                JOIN games g
+                JOIN games2 g
                   ON a.asin = g.asin
                 WHERE c.id = :cid
                 ORDER BY g.title ASC
@@ -38,16 +38,13 @@ def main():
 
             cursor.execute(sql, cid=customer_id)
 
-            results = cursor.fetchall()
-
             purchases = [
                 {
                     'title': p[0],
                     'asin': p[1],
                     'quantity': p[2],
                     'total': '%.2f' % p[3],
-                }
-                for p in results
+                } for p in cursor
             ]
 
         status = 'success'

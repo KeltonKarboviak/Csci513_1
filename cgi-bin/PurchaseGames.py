@@ -36,7 +36,7 @@ def main():
             sql_fetch_if_game_in_account = """\
                 SELECT a.*, g.price
                 FROM customers c, TABLE(c.account) a
-                RIGHT JOIN games g
+                RIGHT JOIN games2 g
                   ON a.asin = g.asin
                 WHERE c.id = :cid
                   AND g.asin = :asin
