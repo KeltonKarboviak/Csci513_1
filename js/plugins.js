@@ -249,7 +249,7 @@ function executeAfterFetchingAllGames(callback) {
         type: 'GET',
         url: '../../cgi-bin/513/1/GetAllGameTitles.cgi',
         success: function (data, statusText) {
-            if (data.status === 'success' && data.games.length > 0) {
+            if (data.status === 'success') {
                 callback(data.games);
             } else {
                 alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all games.');
@@ -268,7 +268,7 @@ function executeAfterFetchingAllCustomers(callback) {
         type: 'GET',
         url: '../../cgi-bin/513/1/GetAllCustNames.cgi',
         success: function (data, statusText) {
-            if (data.status === 'success' && data.customers.length > 0) {
+            if (data.status === 'success') {
                 callback(data.customers);
             } else {
                 alertBar($alertBar, false, '<strong>Warning!</strong> An error occurred trying to retrieve all customers.');
