@@ -53,7 +53,9 @@ insert into customers (username, account) VALUES ('susie',
         purchased_game_t('B00QWERTYU', 3, 37.98)
     )
 );
-insert into customers (username) VALUES ('sally');
+insert into customers (username, account) VALUES ('sally',
+    purchased_games_table()
+);
 
 
 -- Fill games_developers table
