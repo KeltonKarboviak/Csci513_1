@@ -124,7 +124,7 @@
                     data: $(form).serialize(),
                     success: function (data, statusText) {
                         if (data.status === 'success') {
-                            alertBar($alertBar, true, '<strong>Success!</strong> The developers were successfully deleted from the system.');
+                            alertBar($alertBar, true, '<strong>Success!</strong> The developers were successfully deleted from the system. You will now be redirected back to the dashboard.');
 
                             redirectToDashboardAfterTimeout('./admindash.html', 3);
                         } else {

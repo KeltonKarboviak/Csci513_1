@@ -53,6 +53,8 @@
     	<div class="container">
             <div class="row">
                 <div class="col-md-8 mx-auto">
+                    <h3 class="cust-name"></h3>
+
                     <table id="table_account" class="table table-hover table-responsive">
                         <thead class="thead-default">
                             <tr>
@@ -92,6 +94,10 @@
             // link properly to the admin dashboard. Otherwise, it will be the
             // user's dashboard.
             setDashboardLinkInNavbar(isAdmin, userId);
+
+            executeAfterFetchingUsernameFromId(custId, function (username) {
+                $('h3.cust-name').html(username);
+            });
 
             if (isAdmin) {
                 // The user is an Admin
