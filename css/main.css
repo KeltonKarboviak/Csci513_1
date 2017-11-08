@@ -99,6 +99,7 @@ textarea {
 
 body {
    background-color: hsl(199, 8%, 92%);
+   padding-bottom: 45px;
 }
 
 /**
